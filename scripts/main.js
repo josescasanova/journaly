@@ -8,13 +8,29 @@ import { createHistory } from 'history';
  * App
  */
 class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      entries: {}
+    }
+  }
+
+  addEntry(entry) {
+    let date = new Date;
+    date     = date.toDateString();
+    date     = date.replace(/\s+/g, '-').toLowerCase();
+
+    this.state.entries['entry-' + date] = entry;
+    this.setState({entries: this.state.entries});
+  }
+
   render() {
     let { userName } = this.props.params;
 
     return (
-      <div className="journal__main">
+      <div className="journal">
         <JournalHead userName={userName}/>
-        <JournalBody/>
+        <JournalBody addEntry={this.addEntry.bind(this)}/>
       </div>
     )
   }
@@ -28,7 +44,7 @@ class JournalHead extends React.Component {
     let todaysDate = new Date;
     return (
       <div className="journal__header">
-        <h1>Hi {this.props.userName}! - {todaysDate.toString()}</h1>
+        <h1>Hi {this.props.userName}! - {todaysDate.toDateString()}</h1>
       </div>
     )
   }
@@ -38,10 +54,27 @@ class JournalHead extends React.Component {
  * Journal Body
  */
 class JournalBody extends React.Component {
+
+  createEntry(event) {
+    event.preventDefault();
+    var date = new Date;
+    date     = date.toDateString();
+
+    let entry = {
+      text: this.refs.text.value,
+      date: date
+    }
+
+    this.props.addEntry(entry);
+  }
+
   render() {
     return (
       <div className="journal__body">
-      <textarea></textarea>
+        <form className="journal__form" onSubmit={this.createEntry.bind(this)}>
+          <textarea input="type" ref="text" placeholder="Dear Journal..."></textarea>
+          <button type="submit">Save Entry</button>
+        </form>
       </div>
     )
   }
