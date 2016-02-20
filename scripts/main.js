@@ -11,7 +11,8 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      entries:  require('./sample-entries')
+      entries:  require('./sample-entries'),
+      journal: ''
     }
   }
 
@@ -20,17 +21,27 @@ class App extends React.Component {
     date     = date.toDateString();
     date     = date.replace(/\s+/g, '-').toLowerCase();
 
-    this.state.entries['entry-' + date] = entry;
+    let entryName = 'entry-' + date;
+    this.state.entries[entryName] = entry;
     this.setState({entries: this.state.entries});
+
+    this.updateJournal(entryName);
+  }
+
+  updateJournal(entry) {
+    this.state.journal = entry;
+    this.setState({journal: this.state.journal});
   }
 
   render() {
     let { userName } = this.props.params;
+    let entry        = this.state.journal;
+    let entries      = this.state.entries;
 
     return (
       <div className="app__container">
-        <Entries entries={this.state.entries}/>
-        <Journal userName={userName} addEntry={this.addEntry.bind(this)}/>
+        <Entries entries={this.state.entries} updateJournal={this.updateJournal.bind(this)}/>
+        <Journal userName={userName} entry={entry} addEntry={this.addEntry.bind(this)} entries={entries}/>
       </div>
     )
   }
@@ -41,16 +52,10 @@ class App extends React.Component {
  */
 class Entries extends React.Component {
 
-  // <div className="entry" onClick={this.updateJournal.bind(this)} refs="entry" key={key}>
-  // updateJournal(event) {
-    // event.preventDefault();
-    // debugger;
-  // }
-
   renderEntry(key) {
     let entries = this.props.entries;
     return (
-      <Entry entry={key} key={key} index={key} details={entries[key]}/>
+      <Entry entry={key} key={key} index={key} details={entries[key]} updateJournal={this.props.updateJournal}/>
     )
   }
 
@@ -69,10 +74,15 @@ class Entries extends React.Component {
  * Entry
  */
 class Entry extends React.Component {
+  onEntryClick() {
+    let key = this.props.index;
+    this.props.updateJournal(key);
+  }
+
   render() {
     return (
       <div className="entry">
-        <li type="text">
+        <li onClick={this.onEntryClick.bind(this)} type="text">
           {this.props.details.date}
        </li>
       </div>
@@ -87,8 +97,8 @@ class Journal extends React.Component {
   render() {
     return (
       <div className="journal">
-        <JournalHead userName={this.props.userName}/>
-        <JournalBody addEntry={this.props.addEntry}/>
+        <JournalHead userName={this.props.userName} entry={this.props.entry} entries={this.props.entries}/>
+        <JournalBody addEntry={this.props.addEntry} entry={this.props.entry} entries={this.props.entries} />
       </div>
     )
   }
@@ -99,10 +109,20 @@ class Journal extends React.Component {
  */
 class JournalHead extends React.Component {
   render() {
-    let todaysDate = new Date;
+    var entry     = this.props.entry;
+    var entryDate = '';
+
+    if ( entry ) {
+      entry     = this.props.entries[entry];
+      entryDate = entry.date;
+    } else {
+      let date  = new Date;
+      entryDate = date.toDateString();
+    }
+
     return (
       <div className="journal__header">
-        <h1>Hi {this.props.userName}! - {todaysDate.toDateString()}</h1>
+        <h1>Hi {this.props.userName}! - {entryDate}</h1>
       </div>
     )
   }
@@ -115,22 +135,31 @@ class JournalBody extends React.Component {
 
   createEntry(event) {
     event.preventDefault();
-    var date = new Date;
-    date     = date.toDateString();
 
     let entry = {
       text: this.refs.text.value,
-      date: date
+      date: this.refs.date.value
     }
 
     this.props.addEntry(entry);
   }
 
   render() {
+    let entry = this.props.entry;
+
+    if ( entry ) {
+      entry = this.props.entries[entry];
+    } else {
+      let date = new Date;
+      date     = date.toDateString();
+      entry    = {text: "", date: date};
+    }
+
     return (
       <div className="journal__body">
         <form className="journal__form" onSubmit={this.createEntry.bind(this)}>
-          <textarea input="type" ref="text" placeholder="Dear Journal..."></textarea>
+          <textarea ref="text" placeholder="Dear Journal..."></textarea>
+          <input type="hidden" ref="date" value={entry.date}/>
           <button type="submit">Save Entry</button>
         </form>
       </div>
@@ -143,7 +172,7 @@ class JournalBody extends React.Component {
  */
 class LandingPage extends React.Component {
 
-   constructor(props) {
+  constructor(props) {
     super(props);
     this.state = {
       userName: '',
