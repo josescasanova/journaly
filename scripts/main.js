@@ -1,5 +1,6 @@
 import React  from 'react';
 import ReactDOM  from 'react-dom';
+
 import { Router, Route } from 'react-router';
 import { createHistory } from 'history';
 
@@ -62,14 +63,32 @@ class JournalFooter extends React.Component {
  * Landing Page
  */
 class LandingPage extends React.Component {
-  goToApp() {
-    console.log('ye');
+  mixins : [History]
+
+   constructor(props) {
+    super(props);
+    this.state = {
+      userName: '',
+    };
+
+    this.handleUserChange = this.handleUserChange.bind(this);
   }
+
+  handleUserChange() {
+    this.setState({userName: this.refs.userName.value});
+  }
+
+  handleSubmit(e) {
+    e.preventDefault();
+    let userName = this.refs.userName.value;
+    window.location = '/user/' + userName;
+  }
+
   render() {
     return (
-      <form className="form__name" onSubmit={this.goToApp}>
+      <form className="form__name" onSubmit={this.handleSubmit.bind(this)}>
         <h1>What is your first name?</h1>
-        <input type="text" ref="useName" required/>
+        <input type="text" onChange={this.handleUserChange} ref="userName" required />
         <input type="submit" />
       </form>
     )
