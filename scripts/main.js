@@ -8,7 +8,6 @@ import { createHistory } from 'history';
  * App
  */
 class App extends React.Component {
-
   render() {
     let { userName } = this.props.params;
 
@@ -16,7 +15,6 @@ class App extends React.Component {
       <div className="journal__main">
         <JournalHead userName={userName}/>
         <JournalBody/>
-        <JournalFooter/>
       </div>
     )
   }
@@ -27,9 +25,10 @@ class App extends React.Component {
  */
 class JournalHead extends React.Component {
   render() {
+    let todaysDate = new Date;
     return (
       <div className="journal__header">
-        <h1>Hi {this.props.userName}!</h1>
+        <h1>Hi {this.props.userName}! - {todaysDate.toString()}</h1>
       </div>
     )
   }
@@ -42,18 +41,7 @@ class JournalBody extends React.Component {
   render() {
     return (
       <div className="journal__body">
-      </div>
-    )
-  }
-}
-
-/**
- * Journal Footer
- */
-class JournalFooter extends React.Component {
-  render() {
-    return (
-      <div className="journal__footer">
+      <textarea></textarea>
       </div>
     )
   }
