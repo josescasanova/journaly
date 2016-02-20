@@ -28,10 +28,36 @@ class App extends React.Component {
     let { userName } = this.props.params;
 
     return (
-      <div className="journal">
-        <JournalHead userName={userName}/>
-        <JournalBody addEntry={this.addEntry.bind(this)}/>
+      <div className="app__container">
+        <Entries entries={this.state.entries}/>
+        <Journal userName={userName} addEntry={this.addEntry.bind(this)}/>
       </div>
+    )
+  }
+}
+
+/**
+ * Entries
+ */
+class Entries extends React.Component {
+  render() {
+    return (
+      <div className="entries">
+      </div>
+    )
+  }
+}
+
+/**
+ * Journal
+ */
+class Journal extends React.Component {
+  render() {
+    return (
+        <div className="journal">
+          <JournalHead userName={this.props.userName}/>
+          <JournalBody addEntry={this.props.addEntry}/>
+        </div>
     )
   }
 }
