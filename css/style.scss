@@ -1,3 +1,21 @@
+@import 'material-design-colors/colors'
+
+html {
+  background-color: $indigo-500-color;
+}
+
 body {
   font-family: 'Roboto', sans-serif;
+  color: $white-color;
+}
+
+#main {
+  width: 100%;
+}
+
+.form__name {
+  margin: 0 auto;
+  position: relative;
+  padding: 5rem;
+  text-align: center;
 }

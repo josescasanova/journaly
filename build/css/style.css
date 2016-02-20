@@ -1,2 +1,15 @@
+html {
+  background-color: #3F51B5; }
+
 body {
-  font-family: 'Roboto', sans-serif; }
+  font-family: 'Roboto', sans-serif;
+  color: #ffffff; }
+
+#main {
+  width: 100%; }
+
+.form__name {
+  margin: 0 auto;
+  position: relative;
+  padding: 5rem;
+  text-align: center; }

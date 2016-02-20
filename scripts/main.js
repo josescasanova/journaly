@@ -14,6 +14,10 @@ class App extends React.Component {
 
     return (
       <div className="journal__main">
+      <AppBar
+        title="Title"
+        iconClassNameRight="muidocs-icon-navigation-expand-more"
+      />
         <JournalHead userName={userName}/>
         <JournalBody/>
         <JournalFooter/>
@@ -63,7 +67,6 @@ class JournalFooter extends React.Component {
  * Landing Page
  */
 class LandingPage extends React.Component {
-  mixins : [History]
 
    constructor(props) {
     super(props);
