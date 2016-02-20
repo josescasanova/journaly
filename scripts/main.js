@@ -11,7 +11,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      entries: {}
+      entries:  require('./sample-entries')
     }
   }
 
@@ -40,9 +40,41 @@ class App extends React.Component {
  * Entries
  */
 class Entries extends React.Component {
+
+  // <div className="entry" onClick={this.updateJournal.bind(this)} refs="entry" key={key}>
+  // updateJournal(event) {
+    // event.preventDefault();
+    // debugger;
+  // }
+
+  renderEntry(key) {
+    let entries = this.props.entries;
+    return (
+      <Entry entry={key} key={key} index={key} details={entries[key]}/>
+    )
+  }
+
   render() {
     return (
       <div className="entries">
+        <ul>
+          {Object.keys(this.props.entries).map(this.renderEntry.bind(this))}
+        </ul>
+      </div>
+    )
+  }
+}
+
+/**
+ * Entry
+ */
+class Entry extends React.Component {
+  render() {
+    return (
+      <div className="entry">
+        <li type="text">
+          {this.props.details.date}
+       </li>
       </div>
     )
   }
@@ -54,10 +86,10 @@ class Entries extends React.Component {
 class Journal extends React.Component {
   render() {
     return (
-        <div className="journal">
-          <JournalHead userName={this.props.userName}/>
-          <JournalBody addEntry={this.props.addEntry}/>
-        </div>
+      <div className="journal">
+        <JournalHead userName={this.props.userName}/>
+        <JournalBody addEntry={this.props.addEntry}/>
+      </div>
     )
   }
 }
