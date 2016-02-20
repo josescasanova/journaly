@@ -14,10 +14,6 @@ class App extends React.Component {
 
     return (
       <div className="journal__main">
-      <AppBar
-        title="Title"
-        iconClassNameRight="muidocs-icon-navigation-expand-more"
-      />
         <JournalHead userName={userName}/>
         <JournalBody/>
         <JournalFooter/>
