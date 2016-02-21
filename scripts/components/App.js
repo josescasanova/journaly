@@ -9,6 +9,7 @@ import Rebase  from 're-base';
 var base = Rebase.createClass('https://journaly.firebaseio.com/');
 
 class App extends React.Component {
+
   constructor(props) {
     super(props);
 
