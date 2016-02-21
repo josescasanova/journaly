@@ -13,8 +13,8 @@ class App extends React.Component {
   constructor(props) {
     super(props);
 
-    var date  = new Date;
-    date      = date.toDateString();
+    var date      = new Date;
+    date          = date.toDateString();
     let journalId = date.replace(/\s+/g, '-').toLowerCase();
 
     this.state = {
@@ -56,6 +56,7 @@ class App extends React.Component {
     let userName  = this.props.params.userName;
     let journal   = this.state.journal;
     let entries   = this.state.entries;
+    console.log(entries);
 
     return (
       <div className="app__container">
@@ -153,11 +154,10 @@ class JournalHead extends React.Component {
 class JournalBody extends React.Component {
 
   componentDidUpdate(){
-    console.log('update');
+    console.log('update')
   }
-  createEntry(event) {
-    event.preventDefault();
 
+  createEntry() {
     let entry = {text: this.refs.text.value, date: this.refs.date.value}
 
     this.props.addEntry(entry);
@@ -180,7 +180,7 @@ class JournalBody extends React.Component {
     return (
       <div className="journal__body">
         <form className="journal__form" onChange={this.createEntry.bind(this)}>
-          <textarea ref="text" placeholder={entry.text}></textarea>
+          <textarea ref="text" placeholder={entry.text} value={entry.text}></textarea>
           <input type="hidden" ref="date" value={entry.date}/>
         </form>
       </div>
