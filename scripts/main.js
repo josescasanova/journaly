@@ -12,9 +12,14 @@ var base = Rebase.createClass('https://journaly.firebaseio.com/');
 class App extends React.Component {
   constructor(props) {
     super(props);
+
+    var date  = new Date;
+    date      = date.toDateString();
+    let journalId = date.replace(/\s+/g, '-').toLowerCase();
+
     this.state = {
       entries: {},
-      journal: ''
+      journal: journalId
     }
   }
 
@@ -29,7 +34,6 @@ class App extends React.Component {
     let date      = entry.date;
     date          = date.replace(/\s+/g, '-').toLowerCase();
 
-    console.log(entry);
     let entryName = 'entry-' + date;
 
     if ( this.state.entries[entryName] ) {
@@ -43,20 +47,20 @@ class App extends React.Component {
     this.updateJournal(entryName);
   }
 
-  updateJournal(entry) {
-    this.state.journal = entry;
+  updateJournal(journal) {
+    this.state.journal = journal;
     this.setState({journal: this.state.journal});
   }
 
   render() {
     let userName  = this.props.params.userName;
-    let entry     = this.state.journal;
+    let journal   = this.state.journal;
     let entries   = this.state.entries;
 
     return (
       <div className="app__container">
         <Entries entries={this.state.entries} updateJournal={this.updateJournal.bind(this)}/>
-        <Journal userName={userName} entry={entry} addEntry={this.addEntry.bind(this)} entries={entries}/>
+        <Journal userName={userName} journal={journal} addEntry={this.addEntry.bind(this)} entries={entries}/>
       </div>
     )
   }
@@ -112,8 +116,8 @@ class Journal extends React.Component {
   render() {
     return (
       <div className="journal">
-        <JournalHead userName={this.props.userName} entry={this.props.entry} entries={this.props.entries}/>
-        <JournalBody addEntry={this.props.addEntry} entry={this.props.entry} entries={this.props.entries} />
+        <JournalHead userName={this.props.userName} journal={this.props.journal} entries={this.props.entries}/>
+        <JournalBody addEntry={this.props.addEntry} journal={this.props.journal} entries={this.props.entries} />
       </div>
     )
   }
@@ -124,9 +128,16 @@ class Journal extends React.Component {
  */
 class JournalHead extends React.Component {
   render() {
-    var entry     = this.props.entry;
-    let date      = new Date;
-    let entryDate = date.toDateString();
+    let journal   = this.props.journal;
+    let entries   = this.props.entries;
+    let entryDate = "";
+
+    if (entries[journal]) {
+      entryDate = entries[journal].date;
+    } else {
+      let date  = new Date;
+      entryDate = date.toDateString();
+    }
 
     return (
       <div className="journal__header">
@@ -141,6 +152,9 @@ class JournalHead extends React.Component {
  */
 class JournalBody extends React.Component {
 
+  componentDidUpdate(){
+    console.log('update');
+  }
   createEntry(event) {
     event.preventDefault();
 
@@ -150,15 +164,17 @@ class JournalBody extends React.Component {
   }
 
   render() {
-    let entry   = this.props.entry;
+    let journal = this.props.journal;
     let entries = this.props.entries;
+    let entry   = {};
 
-    if (entry === "") {
+    console.log('render');
+    if (entries[journal]) {
+      entry = entries[journal]
+    } else {
       let date = new Date;
       date     = date.toDateString();
       entry    = {text: "", date: date};
-    } else {
-      entry = entries[entry]
     }
 
     return (
