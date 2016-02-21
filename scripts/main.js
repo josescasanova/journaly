@@ -28,6 +28,19 @@ class App extends React.Component {
       context : this,
       state : 'entries'
     });
+
+    let localStorageRef = localStorage.getItem('journaly-' + this.props.params.userName);
+
+    if ( localStorageRef ) {
+      this.setState({
+        journal : localStorageRef
+      })
+    }
+  }
+
+  componentWillUpdate(nextProps, nextState){
+    console.log(nextState);
+    localStorage.setItem('journaly-' + this.props.params.userName, nextState.journal)
   }
 
   addEntry(entry) {
