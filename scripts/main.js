@@ -19,17 +19,17 @@ class App extends React.Component {
   }
 
   componentDidMount(){
-    base.syncState(this.props.params.userName + '/user', {
+    base.syncState('user/' + this.props.params.userName, {
       context : this,
       state : 'entries'
     });
   }
 
   addEntry(entry) {
-    let date = new Date;
-    date     = date.toDateString();
-    date     = date.replace(/\s+/g, '-').toLowerCase();
+    let date      = entry.date;
+    date          = date.replace(/\s+/g, '-').toLowerCase();
 
+    console.log(entry);
     let entryName = 'entry-' + date;
 
     if ( this.state.entries[entryName] ) {
@@ -141,34 +141,25 @@ class JournalHead extends React.Component {
  */
 class JournalBody extends React.Component {
 
-  componentDidMount() {
-    let entry = this.props.entry;
-
-    if ( !entry ) {
-      let date = new Date;
-      date     = date.toDateString();
-      entry    = {text: "", date: date};
-
-      this.props.addEntry(entry);
-    }
-  }
-
   createEntry(event) {
     event.preventDefault();
 
-    let entry = this.props.entry;
-
-    if ( entry ) {
-      entry = this.props.entries[entry];
-      entry.text = this.refs.text.value;
-      entry.date = this.refs.date.value;
-    }
+    let entry = {text: this.refs.text.value, date: this.refs.date.value}
 
     this.props.addEntry(entry);
   }
 
   render() {
-    let entry = this.props.entry;
+    let entry   = this.props.entry;
+    let entries = this.props.entries;
+
+    if (entry === "") {
+      let date = new Date;
+      date     = date.toDateString();
+      entry    = {text: "", date: date};
+    } else {
+      entry = entries[entry]
+    }
 
     return (
       <div className="journal__body">
