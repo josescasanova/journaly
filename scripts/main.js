@@ -3,6 +3,8 @@ import ReactDOM  from 'react-dom';
 
 import { Router, Route } from 'react-router';
 import { createHistory } from 'history';
+var Rebase  = require('re-base');
+var base = Rebase.createClass('https://journaly.firebaseio.com/');
 
 /**
  * App
@@ -11,9 +13,16 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      entries:  require('./sample-entries'),
+      entries: {},
       journal: ''
     }
+  }
+
+  componentDidMount(){
+    base.syncState(this.props.params.userName + '/user', {
+      context : this,
+      state : 'entries'
+    });
   }
 
   addEntry(entry) {
@@ -22,7 +31,13 @@ class App extends React.Component {
     date     = date.replace(/\s+/g, '-').toLowerCase();
 
     let entryName = 'entry-' + date;
-    this.state.entries[entryName] = entry;
+
+    if ( this.state.entries[entryName] ) {
+      this.state.entries[entryName].text = entry.text;
+    } else {
+      this.state.entries[entryName] = entry;
+    }
+
     this.setState({entries: this.state.entries});
 
     this.updateJournal(entryName);
@@ -34,9 +49,9 @@ class App extends React.Component {
   }
 
   render() {
-    let { userName } = this.props.params;
-    let entry        = this.state.journal;
-    let entries      = this.state.entries;
+    let userName  = this.props.params.userName;
+    let entry     = this.state.journal;
+    let entries   = this.state.entries;
 
     return (
       <div className="app__container">
@@ -110,15 +125,8 @@ class Journal extends React.Component {
 class JournalHead extends React.Component {
   render() {
     var entry     = this.props.entry;
-    var entryDate = '';
-
-    if ( entry ) {
-      entry     = this.props.entries[entry];
-      entryDate = entry.date;
-    } else {
-      let date  = new Date;
-      entryDate = date.toDateString();
-    }
+    let date      = new Date;
+    let entryDate = date.toDateString();
 
     return (
       <div className="journal__header">
@@ -133,12 +141,27 @@ class JournalHead extends React.Component {
  */
 class JournalBody extends React.Component {
 
+  componentDidMount() {
+    let entry = this.props.entry;
+
+    if ( !entry ) {
+      let date = new Date;
+      date     = date.toDateString();
+      entry    = {text: "", date: date};
+
+      this.props.addEntry(entry);
+    }
+  }
+
   createEntry(event) {
     event.preventDefault();
 
-    let entry = {
-      text: this.refs.text.value,
-      date: this.refs.date.value
+    let entry = this.props.entry;
+
+    if ( entry ) {
+      entry = this.props.entries[entry];
+      entry.text = this.refs.text.value;
+      entry.date = this.refs.date.value;
     }
 
     this.props.addEntry(entry);
@@ -147,20 +170,11 @@ class JournalBody extends React.Component {
   render() {
     let entry = this.props.entry;
 
-    if ( entry ) {
-      entry = this.props.entries[entry];
-    } else {
-      let date = new Date;
-      date     = date.toDateString();
-      entry    = {text: "", date: date};
-    }
-
     return (
       <div className="journal__body">
-        <form className="journal__form" onSubmit={this.createEntry.bind(this)}>
-          <textarea ref="text" placeholder="Dear Journal..."></textarea>
+        <form className="journal__form" onChange={this.createEntry.bind(this)}>
+          <textarea ref="text" placeholder={entry.text}></textarea>
           <input type="hidden" ref="date" value={entry.date}/>
-          <button type="submit">Save Entry</button>
         </form>
       </div>
     )
