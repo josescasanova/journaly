@@ -15,7 +15,7 @@ class App extends React.Component {
 
     var date      = new Date;
     date          = date.toDateString();
-    let journalId = date.replace(/\s+/g, '-').toLowerCase();
+    let journalId = 'entry-' + date.replace(/\s+/g, '-').toLowerCase();
 
     this.state = {
       entries: {},
@@ -56,7 +56,6 @@ class App extends React.Component {
     let userName  = this.props.params.userName;
     let journal   = this.state.journal;
     let entries   = this.state.entries;
-    console.log(entries);
 
     return (
       <div className="app__container">
@@ -153,10 +152,6 @@ class JournalHead extends React.Component {
  */
 class JournalBody extends React.Component {
 
-  componentDidUpdate(){
-    console.log('update')
-  }
-
   createEntry() {
     let entry = {text: this.refs.text.value, date: this.refs.date.value}
 
@@ -168,7 +163,6 @@ class JournalBody extends React.Component {
     let entries = this.props.entries;
     let entry   = {};
 
-    console.log('render');
     if (entries[journal]) {
       entry = entries[journal]
     } else {
