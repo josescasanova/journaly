@@ -1,21 +1,35 @@
 html {
+  height: 100%;
   background-color: #0D47A1; }
 
 body {
+  height: 100%;
   font-family: 'Roboto', sans-serif;
   color: #FFFFFF; }
 
 #main {
-  width: 100%; }
-
-.form__name {
-  margin: 0 auto;
-  position: relative;
-  padding: 5rem;
-  text-align: center; }
-
-.login {
-  text-align: center; }
-
-.entries button {
-  float: right; }
+  width: 100%;
+  height: 100%; }
+  #main .login {
+    text-align: center; }
+  #main .app__container {
+    height: 100%; }
+    #main .app__container .entries {
+      width: 20%;
+      display: inline-block; }
+    #main .app__container .journal {
+      height: 100%;
+      width: 80%;
+      display: inline-block;
+      position: absolute; }
+      #main .app__container .journal .journal__header {
+        text-align: center; }
+      #main .app__container .journal .journal__body {
+        height: 100%; }
+        #main .app__container .journal .journal__body .journal__form {
+          height: 100%; }
+          #main .app__container .journal .journal__body .journal__form textarea {
+            width: 88%;
+            height: 64%;
+            margin-left: 6%;
+            margin-right: 6%; }
