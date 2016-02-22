@@ -4,6 +4,7 @@
 import React from 'react';
 
 class JournalHead extends React.Component {
+
   render() {
     let journal   = this.props.journal;
     let entries   = this.props.entries;
@@ -18,7 +19,7 @@ class JournalHead extends React.Component {
 
     return (
       <div className="journal__header">
-        <h1>Hi {this.props.userName}! - {entryDate}</h1>
+        <h1>{entryDate}</h1>
       </div>
     )
   }

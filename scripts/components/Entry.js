@@ -4,6 +4,7 @@
 import React from 'react';
 
 class Entry extends React.Component {
+
   onEntryClick() {
     let key = this.props.index;
     this.props.updateJournal(key);

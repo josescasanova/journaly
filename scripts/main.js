@@ -17,7 +17,7 @@ import App from './components/App';
 var routes = (
   <Router history={createHistory()}>
     <Route path="/" component={LandingPage}/>
-    <Route path="/user/:userName" component={App}/>
+    <Route path="/user/:uid" component={App}/>
     <Route path="*" component={NotFound} />
   </Router>
 )

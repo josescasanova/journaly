@@ -8,6 +8,9 @@ import Entries from './Entries';
 import Rebase  from 're-base';
 var base = Rebase.createClass('https://journaly.firebaseio.com/');
 
+import Firebase from 'firebase';
+const ref = new Firebase('https://journaly.firebaseio.com/');
+
 class App extends React.Component {
 
   constructor(props) {
@@ -16,30 +19,38 @@ class App extends React.Component {
     var date      = new Date;
     date          = date.toDateString();
     let journalId = 'entry-' + date.replace(/\s+/g, '-').toLowerCase();
+    let uid       = this.props.params.uid;
 
     this.state = {
       entries: {},
-      journal: journalId
+      journal: journalId,
+      uid: uid
     }
   }
 
   componentDidMount(){
-    base.syncState('user/' + this.props.params.userName, {
+    base.syncState('user/' + this.props.params.uid, {
       context : this,
       state : 'entries'
     });
 
-    let localStorageRef = localStorage.getItem('journaly-' + this.props.params.userName);
+    let localStorageRef = localStorage.getItem('journaly-' + this.props.params.uid);
 
     if ( localStorageRef ) {
       this.setState({
         journal : localStorageRef
       })
     }
+
+    var token = localStorage.getItem('token');
+
+    if(!token) {
+      window.location = '/';
+    }
   }
 
   componentWillUpdate(nextProps, nextState){
-    localStorage.setItem('journaly-' + this.props.params.userName, nextState.journal)
+    localStorage.setItem('journaly-' + this.props.params.uid, nextState.journal)
   }
 
   addEntry(entry) {
@@ -64,15 +75,27 @@ class App extends React.Component {
     this.setState({journal: this.state.journal});
   }
 
+  logout() {
+    ref.unauth();
+    localStorage.removeItem('token');
+    this.setState({
+      uid : null
+    });
+  }
+
   render() {
-    let userName  = this.props.params.userName;
+    let uid       = this.state.uid;
     let journal   = this.state.journal;
     let entries   = this.state.entries;
 
+    if ( !this.state.uid ) {
+      window.location = '/';
+    }
+
     return (
       <div className="app__container">
-        <Entries entries={this.state.entries} updateJournal={this.updateJournal.bind(this)}/>
-        <Journal userName={userName} journal={journal} addEntry={this.addEntry.bind(this)} entries={entries}/>
+        <Entries entries={this.state.entries} updateJournal={this.updateJournal.bind(this)} logout={this.logout.bind(this)}/>
+        <Journal uid={uid} journal={journal} addEntry={this.addEntry.bind(this)} entries={entries}/>
       </div>
     )
   }
