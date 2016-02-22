@@ -47,6 +47,7 @@ class LandingPage extends React.Component {
     return (
       <nav className="login">
         <h1>Journaly</h1>
+        <h2>Simple Journaling App</h2>
         <button className="twitter"onClick={this.authenticate.bind(this, 'twitter')} >Log In with Twitter</button>
       </nav>
     )

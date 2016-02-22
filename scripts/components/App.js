@@ -93,13 +93,16 @@ class App extends React.Component {
     let journal   = this.state.journal;
     let entries   = this.state.entries;
 
+    let logoutButton = <button onClick={this.logout.bind(this)}>Log Out!</button>
+
     if ( !this.state.uid ) {
       window.location = '/';
     }
 
     return (
       <div className="app__container">
-        <Entries entries={this.state.entries} updateJournal={this.updateJournal.bind(this)} logout={this.logout.bind(this)}/>
+        {logoutButton}
+        <Entries entries={this.state.entries} updateJournal={this.updateJournal.bind(this)}/>
         <Journal uid={uid} journal={journal} addEntry={this.addEntry.bind(this)} entries={entries}/>
       </div>
     )

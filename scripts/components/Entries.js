@@ -14,12 +14,10 @@ class Entries extends React.Component {
   }
 
   render() {
-    let logoutButton = <button onClick={this.props.logout}>Log Out!</button>
 
     return (
       <div className="entries">
         <ul>
-          <li>{logoutButton}</li>
           {Object.keys(this.props.entries).map(this.renderEntry.bind(this))}
         </ul>
       </div>

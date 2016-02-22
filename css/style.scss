@@ -1,10 +1,10 @@
 html {
-  background-color: black;
+  background-color: #0D47A1;
 }
 
 body {
   font-family: 'Roboto', sans-serif;
-  color: white;
+  color: #FFFFFF;
 }
 
 #main {
@@ -19,7 +19,11 @@ body {
 }
 
 .login {
-  h1 {
-    text-align: center;
+  text-align: center;
+}
+
+.entries {
+  button {
+    float: right;
   }
 }
