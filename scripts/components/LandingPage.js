@@ -36,6 +36,8 @@ class LandingPage extends React.Component {
     // save the login token in the browser
     localStorage.setItem('token', authData.token);
 
+    localStorage.setItem('uid', authData.uid);
+
     this.setState({
       uid: authData.uid
     });

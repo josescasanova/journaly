@@ -1,9 +1,9 @@
 html {
-  background-color: #3F51B5; }
+  background-color: black; }
 
 body {
   font-family: 'Roboto', sans-serif;
-  color: #ffffff; }
+  color: white; }
 
 #main {
   width: 100%; }
@@ -12,4 +12,7 @@ body {
   margin: 0 auto;
   position: relative;
   padding: 5rem;
+  text-align: center; }
+
+.login h1 {
   text-align: center; }

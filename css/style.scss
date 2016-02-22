@@ -1,12 +1,10 @@
-@import 'material-design-colors/colors'
-
 html {
-  background-color: $indigo-500-color;
+  background-color: black;
 }
 
 body {
   font-family: 'Roboto', sans-serif;
-  color: $white-color;
+  color: white;
 }
 
 #main {
@@ -18,4 +16,10 @@ body {
   position: relative;
   padding: 5rem;
   text-align: center;
+}
+
+.login {
+  h1 {
+    text-align: center;
+  }
 }

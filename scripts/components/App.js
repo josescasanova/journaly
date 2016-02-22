@@ -19,7 +19,7 @@ class App extends React.Component {
     var date      = new Date;
     date          = date.toDateString();
     let journalId = 'entry-' + date.replace(/\s+/g, '-').toLowerCase();
-    let uid       = this.props.params.uid;
+    let uid       = localStorage.getItem('uid');
 
     this.state = {
       entries: {},
@@ -46,6 +46,11 @@ class App extends React.Component {
 
     if(!token) {
       window.location = '/';
+    }
+
+    if (token && this.state.uid !== this.props.params.uid) {
+      console.log('Not allowed');
+      window.location = '/user/' + this.state.uid;
     }
   }
 
